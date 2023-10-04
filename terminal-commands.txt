@@ -1,0 +1,38 @@
+docker-compose ps
+docker exec -it materials-airflow-scheduler-1 /bin/bash
+
+
+(you are in airflow@2cba3f035f74:/opt/airflow$)
+
+airflow -h
+airflow version (2.4.2)
+
+airflow tasks test user_processing create_table 2023-01-01
+CTRL + D
+============================================================
+
+docker-compose ps
+docker exec -it materials-airflow-worker-1 /bin/bash
+
+ls /tmp/
+CTRL + D
+============================================================
+
+docker-compose ps
+docker exec -it materials-postgres-1 /bin/bash
+
+psql -Uairflow
+SELECT * FROM users;
+CTRL + D
+============================================================
+
+docker-compose ps
+docker cp materials-airflow-scheduler-1:/opt/airflow/airflow.cfg .
+
+============================================================
+docker-compose down & docker-compose --profile flower up -d
+docker-compose down
+docker-compose --profile flower up -d
+
+============================================================
+docker-compose down; docker-compose up -d

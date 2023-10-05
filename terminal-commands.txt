@@ -36,3 +36,46 @@ docker-compose --profile flower up -d
 
 ============================================================
 docker-compose down; docker-compose up -d
+
+============================================================
+docker-compose -f .\docker-compose-es.yaml up -d
+docker-compose -f .\docker-compose-es.yaml ps
+
+docker exec -it airflow-intro-airflow-scheduler-1 /bin/bash
+
+(airflow@bb505c62035b:/opt/airflow$) curl -X GET 'http://elastic:9200'
+{
+  "name" : "e485e0c4bf9f",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "g9H8MhzWQGK06uot0bnyzg",
+  "version" : {
+    "number" : "8.3.3",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "801fed82df74dbe537f89b71b098ccaff88d2c56",
+    "build_date" : "2022-07-23T19:30:09.227964828Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.2.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+(airflow@bb505c62035b:/opt/airflow$) airflow plugins
+/home/airflow/.local/lib/python3.7/site-packages/airflow/configuration.py:367: FutureWarning: The auth_backends setting in [api] has had airflow.api.auth.backend.session added in the running config, which is needed by the UI. Please update your config before Apache Airflow 3.0.
+  FutureWarning,
+No plugins loaded
+
+CTRL + D
+
+docker-compose -f .\docker-compose-es.yaml stop
+docker-compose -f .\docker-compose-es.yaml up -d
+
+docker exec -it airflow-intro-airflow-scheduler-1 /bin/bash
+(airflow@bb505c62035b:/opt/airflow$) airflow plugins
+/home/airflow/.local/lib/python3.7/site-packages/airflow/configuration.py:367: FutureWarning: The auth_backends setting in [api] has had airflow.api.auth.backend.session added in the running config, which is needed by the UI. Please update your config before Apache Airflow 3.0.
+  FutureWarning,
+name    | hooks                    | source
+========+==========================+==============================================
+elastic | elastic_hook.ElasticHook | $PLUGINS_FOLDER/hooks/elastic/elastic_hook.py
